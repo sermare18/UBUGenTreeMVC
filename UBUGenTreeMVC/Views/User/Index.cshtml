@@ -1,0 +1,82 @@
+﻿@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Personas</h2>
+
+@if (Model != null) {
+<div class="text-center">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => Model.persona.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.persona.Apellido1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.persona.Apellido2)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.persona.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.persona.Apellido1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.persona.Apellido2)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@Model.persona._id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.padre.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.padre.Apellido1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.padre.Apellido2)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@Model.padre._id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.madre.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.madre.Apellido1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.madre.Apellido2)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@Model.madre._id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+} else {
+<div class="text-center">
+    No tienes registrada a ninguna persona. <a asp-action="AnadirAncestro" asp-controller="User">Agrega tu primera persona</a>
+</div>
+}
+

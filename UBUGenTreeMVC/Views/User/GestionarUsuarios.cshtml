@@ -1,0 +1,63 @@
+@model IEnumerable<UBUGenTreeMVC.Models.Usuario>
+
+@{
+    ViewData["Title"] = "GestionUsuariosDesdeAdministrador";
+}
+
+<h1>Administrar usuarios de UBUGenTreeMVC</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model._nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model._email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model._rol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model._estado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model._ultimoIngreso)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item._nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item._email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item._rol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item._estado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item._ultimoIngreso)
+            </td>
+            <td>
+                <form asp-action="ActivarCuenta" asp-route-id="@item._id" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-primary mr-4">Activar Cuenta</button>
+                </form>
+                <form asp-action="DesactivarCuenta" asp-route-id="@item._id" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Desactivar Cuenta</button>
+                </form>
+            </td>
+
+        </tr>
+}
+    </tbody>
+</table>
