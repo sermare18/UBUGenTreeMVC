@@ -5,16 +5,22 @@ VisualStudioVersion = 25.0.1706.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UBUGenTreeMVC", "UBUGenTreeMVC\UBUGenTreeMVC.csproj", "{7D87BAD3-AA8F-436A-90DA-8DBC5FC2ED0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenTreeLibTest", "GenTreeLibTest\GenTreeLibTest.csproj", "{58E530C4-8BF6-4496-9678-4D711F72D2CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7D87BAD3-AA8F-436A-90DA-8DBC5FC2ED0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D87BAD3-AA8F-436A-90DA-8DBC5FC2ED0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D87BAD3-AA8F-436A-90DA-8DBC5FC2ED0B}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{7D87BAD3-AA8F-436A-90DA-8DBC5FC2ED0B}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{7D87BAD3-AA8F-436A-90DA-8DBC5FC2ED0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D87BAD3-AA8F-436A-90DA-8DBC5FC2ED0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E530C4-8BF6-4496-9678-4D711F72D2CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E530C4-8BF6-4496-9678-4D711F72D2CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E530C4-8BF6-4496-9678-4D711F72D2CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E530C4-8BF6-4496-9678-4D711F72D2CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

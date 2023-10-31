@@ -10,9 +10,11 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <None Remove="Utilidades\" />
+    <None Remove="SeedData\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilidades\" />
+    <Folder Include="SeedData\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">

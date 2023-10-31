@@ -11,6 +11,7 @@ namespace UBUGenTreeMVC.Models
         public static int contador = 0;
 
         [Key]
+        [Display(Name = "ID")]
         public int _id;
 
         [Required]
@@ -37,9 +38,11 @@ namespace UBUGenTreeMVC.Models
 
         public int? Edad { get; set; }
 
-        // public Persona? A1 { get; set; }
+        [Display(Name = "ID padre")]
+        public int? A1_id { get; set; }
 
-        // public Persona? A2 { get; set; }
+        [Display(Name = "ID madre")]
+        public int? A2_id { get; set; }
 
         public Persona()
         {
@@ -49,7 +52,7 @@ namespace UBUGenTreeMVC.Models
 
         public override string ToString()
         {
-            return $"ID: {_id}, Nombre: {Nombre}, Primer Apellido: {Apellido1}, Segundo Apellido: {Apellido2}, Localidad: {Localidad}, Fecha de Nacimiento: {FechaNac.ToString("yyyy-MM-dd")}, Fecha de Defunción: {(FechaDef.HasValue ? FechaDef.Value.ToString("yyyy-MM-dd") : "N/A")}";
+            return $"ID: {_id}, Nombre: {Nombre}, Primer Apellido: {Apellido1}, Segundo Apellido: {Apellido2}, Localidad: {Localidad}, Fecha de Nacimiento: {FechaNac.ToString("yyyy-MM-dd")}, Fecha de Defunción: {(FechaDef.HasValue ? FechaDef.Value.ToString("yyyy-MM-dd") : "N/A")}, id_padre: {A1_id}, id_madre: {A2_id}";
         }
     }
 }

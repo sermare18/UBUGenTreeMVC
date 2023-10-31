@@ -82,11 +82,36 @@ namespace UBUGenTreeMVC.Controllers
                 if (usuarioDB._contrasenaHash != Utils.Encriptar(model._contrasenaHash))
                 {
                     ModelState.AddModelError(string.Empty, "La contraseña es incorrecta.");
+                    usuarioDB._intentosFallidos++;
+
+                    // Al administrador no se le puede bloquear la cuenta.
+                    if (usuarioDB._intentosFallidos >= 3 && usuarioDB._rol != Roles.Administrador)
+                    {
+                        usuarioDB._estado = EstadoCuenta.Bloqueada;
+                        _context.Update(usuarioDB);
+                        await _context.SaveChangesAsync();
+                        ModelState.AddModelError(string.Empty, string.Format("Estado de la cuenta: {0}", usuarioDB._estado.ToString()));
+                    }
+
+                    _context.Update(usuarioDB);
+                    await _context.SaveChangesAsync();
+
+                    return View(model);
+
+                }
+
+                if (usuarioDB._estado == EstadoCuenta.Solicitada || usuarioDB._estado == EstadoCuenta.Bloqueada)
+                {
+                    ModelState.AddModelError(string.Empty, string.Format("Estado de la cuenta: {0}", usuarioDB._estado.ToString()));
                     return View(model);
                 }
 
                 // Si el correo electrónico y la contraseña son correctos, inicia sesión y redirige al usuario
                 HttpContext.Session.SetString("UsuarioId", usuarioDB._id.ToString());
+                HttpContext.Session.SetString("Rol", usuarioDB._rol.ToString());
+                usuarioDB._intentosFallidos = 0;
+                _context.Update(usuarioDB);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -138,9 +163,9 @@ namespace UBUGenTreeMVC.Controllers
 
                 IndexViewModel model;
 
-                if (usuarioDB._ancestros != null)
+                if (usuarioDB._ancestros.Count > 0)
                 {
-                    model = new IndexViewModel(usuarioDB._ancestros.persona, usuarioDB._ancestros.padre.persona, usuarioDB._ancestros.madre.persona);
+                    model = new IndexViewModel(usuarioDB._ancestros);
                 }
                 else
                 {
@@ -177,6 +202,11 @@ namespace UBUGenTreeMVC.Controllers
                 if (usuarioDB == null)
                 {
                     return NotFound();
+                }
+
+                if (usuarioDB._rol != Roles.Administrador)
+                {
+                    return Redirect(nameof(Index));
                 }
 
                 var usuariosDB = await _context.Usuario.ToListAsync();
@@ -219,29 +249,16 @@ namespace UBUGenTreeMVC.Controllers
 
                 if (usuarioDB._ancestrosJSON != null)
                 {
-                    var data = JsonConvert.DeserializeObject<dynamic>(usuarioDB._ancestrosJSON);
-
-                    // Crea objetos Persona para la persona, el padre y la madre
-                    Persona persona = usuarioDB._ancestros.persona;
-                    Persona padre = usuarioDB._ancestros.padre.persona;
-                    Persona madre = usuarioDB._ancestros.madre.persona;
+                    var data = JsonConvert.DeserializeObject<List<UBUGenTreeMVC.Models.Persona>>(usuarioDB._ancestrosJSON);
 
                     Persona personaSeleccionada = null;
 
-                    if (persona._id == id)
+                    foreach (var persona in data)
                     {
-                        personaSeleccionada = persona;
-                    } else if (padre != null)
-                    {
-                        if (padre._id == id)
+                        if (persona._id == id)
                         {
-                            personaSeleccionada = padre;
-                        }
-                    } else if (madre != null)
-                    {
-                        if (madre._id == id)
-                        {
-                            personaSeleccionada = madre;
+                            personaSeleccionada = persona;
+                            break;
                         }
                     }
 
@@ -259,8 +276,11 @@ namespace UBUGenTreeMVC.Controllers
         }
 
         // GET: User/AñadirAncestro
-        public IActionResult AnadirAncestro()
+        public async Task<IActionResult> AnadirAncestros(int? id)
         {
+            Console.WriteLine("desde GET AnadirAncestros");
+            Console.WriteLine(id);
+
             var idUsuario = HttpContext.Session.GetString("UsuarioId");
 
             if (idUsuario == null)
@@ -268,12 +288,71 @@ namespace UBUGenTreeMVC.Controllers
                 // El usuario no está autenticado, redirígelo a la página de inicio de sesión.
                 return RedirectToAction("Login", "User");
             }
-            return View(nameof(AnadirAncestro));
+
+            AnadirAncestrosViewModel model;
+
+            // Comprobamos si esa persona que tiene registrada el usuario ya tiene definido ancestros
+            int idUsuarioInt;
+            if (Int32.TryParse(idUsuario, out idUsuarioInt))
+            {
+                var usuarioDB = await _context.Usuario.FindAsync(idUsuarioInt);
+
+                if (usuarioDB == null)
+                {
+                    return NotFound();
+                }
+
+                Persona persona = null;
+
+                foreach (Persona p in usuarioDB._ancestros)
+                {
+                    if (p._id == (int)id)
+                    {
+                        persona = p;
+                        break;
+                    }
+                }
+
+                (int? A1_id, int? A2_id) = usuarioDB.GetIdsAncestros((int)id);
+
+                if (A1_id != null && A2_id != null)
+                {
+                    Persona padre = null;
+                    Persona madre = null;
+
+                    foreach (Persona p in usuarioDB._ancestros)
+                    {
+                        if (p._id == A1_id)
+                        {
+                            padre = p;
+                        } else if (p._id == A2_id)
+                        {
+                            madre = p;
+                        }
+                    }
+
+                    model = new AnadirAncestrosViewModel(persona, padre, madre);
+                    return View(nameof(AnadirAncestros), model);
+
+                }
+                else
+                {
+                    model = new AnadirAncestrosViewModel(persona, null, null);
+                    return View(nameof(AnadirAncestros), model);
+                }
+
+            }
+            else
+            {
+                // No se pudo convertir idUsuario a int. Maneja este error como consideres apropiado.
+                return RedirectToAction("Login", "User");
+            }
         }
 
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AnadirAncestro(AnadirAncestroViewModel model)
+        public async Task<IActionResult> AnadirAncestros(AnadirAncestrosViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -295,8 +374,7 @@ namespace UBUGenTreeMVC.Controllers
                         return NotFound();
                     }
 
-                    usuarioDB.SetAncestros(model.usuario, model.padre, model.madre);
-
+                    usuarioDB.AnadirAncestros(model.persona, model.padre, model.madre);
                     _context.Update(usuarioDB);
                     await _context.SaveChangesAsync();
 
@@ -319,6 +397,71 @@ namespace UBUGenTreeMVC.Controllers
             }
 
             return View(model);
+
+        }
+        
+
+        // GET: User/AñadirPrimeraPersona
+        public IActionResult AnadirPrimeraPersona()
+        {
+            var idUsuario = HttpContext.Session.GetString("UsuarioId");
+
+            if (idUsuario == null)
+            {
+                // El usuario no está autenticado, redirígelo a la página de inicio de sesión.
+                return RedirectToAction("Login", "User");
+            }
+            return View(nameof(AnadirPrimeraPersona));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AnadirPrimeraPersona(Persona persona)
+        {
+            if (ModelState.IsValid)
+            {
+                var idUsuario = HttpContext.Session.GetString("UsuarioId");
+
+                if (idUsuario == null)
+                {
+                    // El usuario no está autenticado, redirígelo a la página de inicio de sesión.
+                    return RedirectToAction("Login", "User");
+                }
+
+                int idUsuarioInt;
+                if (Int32.TryParse(idUsuario, out idUsuarioInt))
+                {
+                    var usuarioDB = await _context.Usuario.FindAsync(idUsuarioInt);
+
+                    if (usuarioDB == null)
+                    {
+                        return NotFound();
+                    }
+
+                    usuarioDB.SetPrimeraPersona(persona);
+
+                    _context.Update(usuarioDB);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    // No se pudo convertir idUsuario a int. Maneja este error como consideres apropiado.
+                }
+            }
+
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .Select(x => new { x.Key, x.Value.Errors })
+                .ToArray();
+
+            foreach (var error in errors)
+            {
+                Console.WriteLine(error);
+            }
+
+            return View(persona);
 
         }
 

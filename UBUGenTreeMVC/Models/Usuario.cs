@@ -63,7 +63,7 @@ namespace UBUGenTreeMVC.Models
         public int _intentosFallidos { get; set; }
 
         [NotMapped]
-        public Nodo? _ancestros
+        public List<Persona>? _ancestros
         {
             get
             {
@@ -73,17 +73,8 @@ namespace UBUGenTreeMVC.Models
                 }
                 else
                 {
-                    // Deserializa _ancestrosJSON a un objeto anónimo
-                    var data = JsonConvert.DeserializeObject<dynamic>(_ancestrosJSON);
-
-                    // Crea objetos Persona para la persona, el padre y la madre
-                    Persona persona = JsonConvert.DeserializeObject<Persona>(data.persona.ToString());
-                    Persona padre = data.padre != null ? JsonConvert.DeserializeObject<Persona>(data.padre.persona.ToString()) : null;
-                    Persona madre = data.madre != null ? JsonConvert.DeserializeObject<Persona>(data.madre.persona.ToString()) : null;
-
-                    // Crea el objeto Nodo
-                    Nodo ancestros = new Nodo(persona, padre, madre);
-
+                    // Deserializa _ancestrosJSON a una lista de objetos Persona
+                    List<Persona> ancestros = JsonConvert.DeserializeObject<List<Persona>>(_ancestrosJSON);
                     return ancestros;
                 }
             }
@@ -92,30 +83,32 @@ namespace UBUGenTreeMVC.Models
 
         public Usuario()
         {
-
+            _ancestros = new List<Persona>();
+            _ancestrosJSON = JsonConvert.SerializeObject(_ancestros);
         }
 
-        private Usuario(string nombre, string email, string contrasenaHash, Roles rol)
+        private Usuario(string nombre, string email, string contrasenaHash, Roles rol, EstadoCuenta estado = EstadoCuenta.Solicitada)
         {
             this._nombre = nombre;
             this._email = email;
             this._contrasenaHash = Utils.Encriptar(contrasenaHash);
             this._rol = rol;
-            _ancestros = null;
-            _estado = EstadoCuenta.Solicitada; // Los usuarios de nuevo ingreso tienen el estado "Solicitada".
+            _ancestros = new List<Persona>();
+            _estado = estado; // Los usuarios de nuevo ingreso tienen el estado "Solicitada".
             _ultimoIngreso = DateTime.Now;
             _intentosFallidos = 0;
+            _ancestrosJSON = JsonConvert.SerializeObject(_ancestros);
 
         }
 
         public static Usuario CrearAdministrador(string nombre, string email, string contraseñaHash)
         {
-            return new Usuario(nombre, email, contraseñaHash, Roles.Administrador);
+            return new Usuario(nombre, email, contraseñaHash, Roles.Administrador, EstadoCuenta.Activa);
         }
 
         public static Usuario CrearGestor(string nombre, string email, string contraseñaHash)
         {
-            return new Usuario(nombre, email, contraseñaHash, Roles.Gestor);
+            return new Usuario(nombre, email, contraseñaHash, Roles.Gestor, EstadoCuenta.Activa);
         }
 
         public static Usuario CrearUsuario(string nombre, string email, string contraseñaHash)
@@ -133,63 +126,93 @@ namespace UBUGenTreeMVC.Models
             return this;
         }
 
-        public Nodo GetAncestros()
+        public List<Persona> GetAncestros()
         {
             return this._ancestros;
         }
 
         public void SetAncestros(Persona usuario, Persona padre, Persona madre)
         {
-            this._ancestros = new Nodo(usuario, padre, madre);
-            
-        }
-
-        public List<Nodo> GetSucesores()
-        {
-            return this._ancestros.hijos;
-        }
-
-     
-        public void AddHijo(Persona hijo, Persona padre, Persona madre)
-        {
-            this._ancestros.hijos.Add(new Nodo(hijo, padre, madre));
-        }
-      
-
-        public void Ingresar(string contrasena)
-        {
-
-            if (this._estado == EstadoCuenta.Solicitada || this._estado == EstadoCuenta.Bloqueada)
+            // Asegúrate de que _ancestros está inicializado
+            /*
+            if (_ancestros == null)
             {
-                return;
+                _ancestros = new List<Persona>();
             }
 
-            if (Utils.Encriptar(contrasena) == this._contrasenaHash)
-            {
-                this._ultimoIngreso = DateTime.Now;
-                this._intentosFallidos = 0;
+            Console.WriteLine(usuario is Persona);
+            Console.WriteLine(usuario is AnadirAncestrosViewModel);
 
-                if ((DateTime.Now - this._ultimoIngreso).TotalDays > 30)
+            this._ancestros.Add((Persona)usuario);
+            this._ancestros.Add((Persona)padre);
+            this._ancestros.Add((Persona)madre);
+            */
+
+            List<Persona> debugList = new List<Persona>();
+            debugList.Add(usuario);
+            debugList.Add(padre);
+            debugList.Add(madre);
+
+            // Serializa la lista completa de ancestros a JSON
+            this._ancestrosJSON = JsonConvert.SerializeObject(debugList);
+
+        }
+
+        public void AnadirAncestros(Persona target, Persona padre, Persona madre)
+        {
+            // Deserializa _ancestrosJSON a una lista de objetos Persona
+            var ancestrosCopia = JsonConvert.DeserializeObject<List<Persona>>(_ancestrosJSON);
+
+            ancestrosCopia.Add(padre);
+            ancestrosCopia.Add(madre);
+
+            foreach (Persona p in ancestrosCopia)
+            {
+                if (p.Nombre == target.Nombre &&
+                    p.Apellido1 == target.Apellido1 &&
+                    p.Apellido2 == target.Apellido2 &&
+                    p.Localidad == target.Localidad &&
+                    p.FechaNac == target.FechaNac)
                 {
-                    this._estado = EstadoCuenta.Inactiva;
-                }
-                else
-                {
-                    this._estado = EstadoCuenta.Activa;
+                    p.A1_id = padre._id;
+                    p.A2_id = madre._id;
+                    break;
                 }
             }
-            else
+
+            this._ancestrosJSON = JsonConvert.SerializeObject(ancestrosCopia);
+
+        }
+
+        public void SetPrimeraPersona(Persona persona)
+        {
+            // Deserializa _ancestrosJSON a una lista de objetos Persona
+            _ancestros = JsonConvert.DeserializeObject<List<Persona>>(_ancestrosJSON);
+
+            // Asegúrate de que _ancestros está inicializado
+            if (_ancestros == null)
             {
-                this._intentosFallidos++;
+                _ancestros = new List<Persona>();
+            }
 
-                if (this._intentosFallidos >= 3)
+            // Añade los objetos Persona a la lista
+            List<Persona> ancestros = new List<Persona>();
+            ancestros.Add(persona);
+
+            // Serializa la lista completa de ancestros a JSON
+            this._ancestrosJSON = JsonConvert.SerializeObject(ancestros);
+        }
+
+        public (int?, int?) GetIdsAncestros(int persona_id)
+        {
+            foreach (Persona persona in _ancestros)
+            {
+                if (persona._id == persona_id)
                 {
-                    this._estado = EstadoCuenta.Bloqueada;
-
-                    // Desbloquear la cuenta después de 10 segundos
-                    Task.Delay(10000).ContinueWith(t => this._estado = EstadoCuenta.Activa);
+                    return (persona.A1_id, persona.A2_id);
                 }
             }
+            return (null, null);
         }
 
         public void ValidarCuenta(Usuario usuario)

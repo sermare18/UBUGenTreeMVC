@@ -1,0 +1,86 @@
+@model UBUGenTreeMVC.Models.AnadirAncestrosViewModel
+
+@{
+    ViewData["Title"] = "Añadir ancestros";
+}
+
+<h1>Añadir ancestros</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AnadirAncestros">
+
+            <input type="hidden" asp-for="persona.Nombre" value="@Model.persona.Nombre" />
+            <input type="hidden" asp-for="persona.Apellido1" value="@Model.persona.Apellido1" />
+            <input type="hidden" asp-for="persona.Apellido2" value="@Model.persona.Apellido2" />
+            <input type="hidden" asp-for="persona.Localidad" value="@Model.persona.Localidad" />
+            <input type="hidden" asp-for="persona.FechaNac" value="@Model.persona.FechaNac" />
+
+            <div class="form-group">
+                <label class="control-label">Nombre del padre</label>
+                <input asp-for="padre.Nombre" class="form-control" value="@Model?.padre?.Nombre" />
+                <span asp-validation-for="padre.Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Primer apellido del padre</label>
+                <input asp-for="padre.Apellido1" class="form-control" value="@Model?.padre?.Apellido1" />
+                <span asp-validation-for="padre.Apellido1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Segundo apellido del padre</label>
+                <input asp-for="padre.Apellido2" class="form-control" value="@Model?.padre?.Apellido2" />
+                <span asp-validation-for="padre.Apellido2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Localidad</label>
+                <input asp-for="padre.Localidad" class="form-control" value="@Model?.padre?.Localidad" />
+                <span asp-validation-for="padre.Localidad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Fecha de nacimiento</label>
+                <input asp-for="padre.FechaNac" class="form-control" value="@Model?.padre?.FechaNac" />
+                <span asp-validation-for="padre.FechaNac" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label">Nombre de la madre</label>
+                <input asp-for="madre.Nombre" class="form-control" value="@Model?.madre?.Nombre" />
+                <span asp-validation-for="madre.Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Primer apellido de la madre</label>
+                <input asp-for="madre.Apellido1" class="form-control" value="@Model?.madre?.Apellido1" />
+                <span asp-validation-for="madre.Apellido1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Segundo apellido de la madre</label>
+                <input asp-for="madre.Apellido2" class="form-control" value="@Model?.madre?.Apellido2" />
+                <span asp-validation-for="madre.Apellido2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Localidad</label>
+                <input asp-for="madre.Localidad" class="form-control" value="@Model?.madre?.Localidad" />
+                <span asp-validation-for="madre.Localidad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Fecha de nacimiento</label>
+                <input asp-for="madre.FechaNac" class="form-control" value="@Model?.madre?.FechaNac" />
+                <span asp-validation-for="madre.FechaNac" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

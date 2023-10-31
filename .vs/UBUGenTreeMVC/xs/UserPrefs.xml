@@ -1,38 +1,45 @@
-﻿<Properties StartupConfiguration="{7D87BAD3-AA8F-436A-90DA-8DBC5FC2ED0B}|https">
-  <MonoDevelop.Ide.Workbench ActiveDocument="UBUGenTreeMVC/Controllers/UserController.cs">
+﻿<Properties StartupConfiguration="Varios proyectos">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="wwwTest/InicioSesionTest.cs">
     <Files>
-      <File FileName="UBUGenTreeMVC/Models/Usuario.cs" />
-      <File FileName="UBUGenTreeMVC/Controllers/UserController.cs" Line="234" Column="46" />
-      <File FileName="UBUGenTreeMVC/Models/AñadirAncestroViewModel.cs" />
-      <File FileName="UBUGenTreeMVC/Models/Persona.cs" />
-      <File FileName="UBUGenTreeMVC/Views/User/Index.cshtml" />
-      <File FileName="UBUGenTreeMVC/Views/User/Details.cshtml" />
+      <File FileName="wwwTest/UnitTest1.cs" Line="59" Column="58" />
+      <File FileName="wwwTest/Usings.cs" Line="1" Column="1" />
+      <File FileName="UBUGenTreeMVC/Program.cs" Line="1" Column="1" />
+      <File FileName="UBUGenTreeMVC/appsettings.json" Line="1" Column="1" />
+      <File FileName="UBUGenTreeMVC/appsettings.Development.json" Line="1" Column="1" />
+      <File FileName="UBUGenTreeMVC/Properties/launchSettings.json" Line="23" Column="48" />
+      <File FileName="wwwTest/SeleniumTest.cs" Line="24" Column="32" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="UBUGenTreeMVC" expanded="True">
-            <Node name="UBUGenTreeMVC" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="UserController.cs" selected="True" />
-              </Node>
-              <Node name="Models" expanded="True" />
-              <Node name="Views" expanded="True">
-                <Node name="Home" expanded="True" />
-                <Node name="Shared" expanded="True" />
-                <Node name="User" expanded="True" />
-              </Node>
+            <Node name="wwwTest">
+              <Node name="InicioSesionTest.cs" selected="True" />
             </Node>
           </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="UBUGenTreeMVC" selected="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <Debugger.DebugSourceFolders />
+  <MultiItemStartupConfigurations>
+    <MultiItemSolutionRunConfiguration Id="Varios proyectos" Name="Varios proyectos">
+      <Items>
+        <StartupItem ItemId="{7D87BAD3-AA8F-436A-90DA-8DBC5FC2ED0B}" ItemName="UBUGenTreeMVC" ConfigurationId="https" />
+      </Items>
+    </MultiItemSolutionRunConfiguration>
+  </MultiItemStartupConfigurations>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints />
+  <MonoDevelop.Ide.ItemProperties.GenTreeLibTest FirstBuild="True" />
   <MonoDevelop.Ide.ItemProperties.UBUGenTreeMVC PreferredExecutionTarget="/Applications/Safari.app" />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
 </Properties>
