@@ -1,27 +1,29 @@
 ﻿<Properties StartupConfiguration="Varios proyectos">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="wwwTest/InicioSesionTest.cs">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="UBUGenTreeMVC/Controllers/UserController.cs">
     <Files>
-      <File FileName="wwwTest/UnitTest1.cs" Line="59" Column="58" />
-      <File FileName="wwwTest/Usings.cs" Line="1" Column="1" />
-      <File FileName="UBUGenTreeMVC/Program.cs" Line="1" Column="1" />
-      <File FileName="UBUGenTreeMVC/appsettings.json" Line="1" Column="1" />
-      <File FileName="UBUGenTreeMVC/appsettings.Development.json" Line="1" Column="1" />
-      <File FileName="UBUGenTreeMVC/Properties/launchSettings.json" Line="23" Column="48" />
-      <File FileName="wwwTest/SeleniumTest.cs" Line="24" Column="32" />
+      <File FileName="GenTreeLibTest/UsuarioTest.cs" Line="215" Column="9" />
+      <File FileName="UBUGenTreeMVC/Models/Usuario.cs" Line="147" Column="21" />
+      <File FileName="UBUGenTreeMVC/Controllers/UserController.cs" Line="79" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="UBUGenTreeMVC" expanded="True">
-            <Node name="wwwTest">
-              <Node name="InicioSesionTest.cs" selected="True" />
+            <Node name="UBUGenTreeMVC">
+              <Node name="Controllers" expanded="True">
+                <Node name="UserController.cs" selected="True" />
+              </Node>
+              <Node name="Models" expanded="True" />
+              <Node name="Views" expanded="True">
+                <Node name="Shared" expanded="True" />
+              </Node>
             </Node>
           </Node>
         </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
       </Pad>
       <Pad Id="MonoDevelop.UnitTesting.TestPad">
         <State name="__root__">
@@ -30,8 +32,7 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <Debugger.DebugSourceFolders />
+  <MonoDevelop.Ide.ItemProperties.UBUGenTreeMVC PreferredExecutionTarget="/Applications/Safari.app" />
   <MultiItemStartupConfigurations>
     <MultiItemSolutionRunConfiguration Id="Varios proyectos" Name="Varios proyectos">
       <Items>
@@ -39,7 +40,6 @@
       </Items>
     </MultiItemSolutionRunConfiguration>
   </MultiItemStartupConfigurations>
-  <MonoDevelop.Ide.DebuggingService.Breakpoints />
-  <MonoDevelop.Ide.ItemProperties.GenTreeLibTest FirstBuild="True" />
-  <MonoDevelop.Ide.ItemProperties.UBUGenTreeMVC PreferredExecutionTarget="/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <Debugger.DebugSourceFolders />
 </Properties>

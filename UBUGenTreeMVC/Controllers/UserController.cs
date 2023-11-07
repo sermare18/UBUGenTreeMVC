@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using NuGet.ContentModel;
 using UBUGenTreeMVC.Data;
 using UBUGenTreeMVC.Models;
 
@@ -34,7 +35,7 @@ namespace UBUGenTreeMVC.Controllers
             if (ModelState.IsValid)
             {
                 // Aquí puedes decidir el rol del usuario basado en tu lógica de negocio
-                usuario = Usuario.CrearAdministrador(usuario._nombre, usuario._email, usuario._contrasenaHash);
+                usuario = Usuario.CrearUsuario(usuario._nombre, usuario._email, usuario._contrasenaHash);
 
                 // Aquí puedes guardar el usuario en tu base de datos
                 _context.Add(usuario);

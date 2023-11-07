@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 /*
@@ -131,22 +132,9 @@ namespace UBUGenTreeMVC.Models
             return this._ancestros;
         }
 
+        // Método solo utilizado en los Test
         public void SetAncestros(Persona usuario, Persona padre, Persona madre)
         {
-            // Asegúrate de que _ancestros está inicializado
-            /*
-            if (_ancestros == null)
-            {
-                _ancestros = new List<Persona>();
-            }
-
-            Console.WriteLine(usuario is Persona);
-            Console.WriteLine(usuario is AnadirAncestrosViewModel);
-
-            this._ancestros.Add((Persona)usuario);
-            this._ancestros.Add((Persona)padre);
-            this._ancestros.Add((Persona)madre);
-            */
 
             List<Persona> debugList = new List<Persona>();
             debugList.Add(usuario);
@@ -155,7 +143,6 @@ namespace UBUGenTreeMVC.Models
 
             // Serializa la lista completa de ancestros a JSON
             this._ancestrosJSON = JsonConvert.SerializeObject(debugList);
-
         }
 
         public void AnadirAncestros(Persona target, Persona padre, Persona madre)
@@ -163,9 +150,7 @@ namespace UBUGenTreeMVC.Models
             // Deserializa _ancestrosJSON a una lista de objetos Persona
             var ancestrosCopia = JsonConvert.DeserializeObject<List<Persona>>(_ancestrosJSON);
 
-            ancestrosCopia.Add(padre);
-            ancestrosCopia.Add(madre);
-
+            // Verificamos que la persona target se encuentra en ancestrosCopia
             foreach (Persona p in ancestrosCopia)
             {
                 if (p.Nombre == target.Nombre &&
@@ -174,20 +159,28 @@ namespace UBUGenTreeMVC.Models
                     p.Localidad == target.Localidad &&
                     p.FechaNac == target.FechaNac)
                 {
-                    p.A1_id = padre._id;
-                    p.A2_id = madre._id;
+                    // Comprobamos que la fecha de nacimiento de la madre y del padre es anterior a la de la persona target
+                    if (target.FechaNac > padre.FechaNac && target.FechaNac > madre.FechaNac)
+                    {
+                        ancestrosCopia.Add(padre);
+                        ancestrosCopia.Add(madre);
+
+                        p.A1_id = padre._id;
+                        p.A2_id = madre._id;
+                    } else
+                    {
+                        // No se añaden los ancestros
+                    }
+
                     break;
                 }
             }
 
             this._ancestrosJSON = JsonConvert.SerializeObject(ancestrosCopia);
-
         }
 
         public void SetPrimeraPersona(Persona persona)
         {
-            // Deserializa _ancestrosJSON a una lista de objetos Persona
-            _ancestros = JsonConvert.DeserializeObject<List<Persona>>(_ancestrosJSON);
 
             // Asegúrate de que _ancestros está inicializado
             if (_ancestros == null)
