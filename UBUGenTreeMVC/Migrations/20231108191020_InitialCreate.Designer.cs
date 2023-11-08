@@ -11,7 +11,7 @@ using UBUGenTreeMVC.Data;
 namespace UBUGenTreeMVC.Migrations
 {
     [DbContext(typeof(MvcUserContext))]
-    [Migration("20231107121450_InitialCreate")]
+    [Migration("20231108191020_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
